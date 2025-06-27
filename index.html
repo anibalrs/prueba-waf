@@ -1,108 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba WAF - Consumiendo class.utp.edu.pe</title>
+    <title>Verificador de Acceso entre Dominios</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        iframe { 
+            width: 90%; 
+            height: 500px; 
+            border: 2px solid #3498db;
+            margin: 20px auto;
+            display: block;
         }
         .status {
-            padding: 20px;
-            background: #f0f0f0;
+            padding: 15px;
+            background: #f8f9fa;
             border-radius: 5px;
             max-width: 600px;
-            margin: 20px auto;
-        }
-        .success {
-            color: green;
-        }
-        .error {
-            color: red;
-        }
-        .content-viewer {
-            border: 1px solid #ccc;
-            padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: left;
-            min-height: 200px;
-            overflow: auto;
-            background: #f9f9f9;
-        }
-        iframe {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ccc;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <h1>Prueba de WAF</h1>
-    <p>Intentando consumir recursos de <code>class.utp.edu.pe</code>...</p>
+    <h1>Verificador de Acceso entre Dominios</h1>
     
-    <div class="status" id="status">
-        Cargando...
+    <div class="status">
+        <p>Cargando <strong id="target-url">https://class.utp.edu.pe</strong></p>
+        <p id="status-text">🟡 Cargando...</p>
     </div>
 
-    <!-- Iframe visible para ver la carga completa -->
     <iframe 
-        id="test-iframe" 
+        id="web-viewer" 
         src="https://class.utp.edu.pe" 
         sandbox="allow-scripts allow-same-origin"
     ></iframe>
 
-    <div class="content-viewer">
-        <h3>Información de carga:</h3>
-        <div id="load-info"></div>
-    </div>
-
     <script>
-        const iframe = document.getElementById('test-iframe');
-        const statusDiv = document.getElementById('status');
-        const loadInfo = document.getElementById('load-info');
-        
+        const iframe = document.getElementById('web-viewer');
+        const statusText = document.getElementById('status-text');
+
         iframe.onload = function() {
-            // Verificación básica de carga
-            statusDiv.innerHTML = '<span class="success">✅ El iframe cargó correctamente (no bloqueado por WAF)</span>';
-            
-            try {
-                // Intento de acceso al contenido (puede fallar por CORS)
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                loadInfo.innerHTML = `
-                    <p><strong>URL cargada:</strong> ${iframe.src}</p>
-                    <p><strong>Título:</strong> ${iframeDoc.title}</p>
-                    <p><strong>Estado:</strong> Contenido cargado (JavaScript dependiente)</p>
-                    <p class="error">Nota: No se puede extraer el HTML completo debido a políticas de seguridad del navegador.</p>
-                `;
-            } catch (error) {
-                loadInfo.innerHTML = `
-                    <p><strong>URL cargada:</strong> ${iframe.src}</p>
-                    <p class="error">No se puede acceder al contenido del iframe debido a políticas de seguridad (CORS).</p>
-                    <p>El sitio está diseñado para funcionar con JavaScript.</p>
-                `;
-            }
+            statusText.innerHTML = "Iframe cargado - Puedes ver el contenido";
+            statusText.style.color = "green";
         };
 
         iframe.onerror = function() {
-            statusDiv.innerHTML = '<span class="error">❌ Error al cargar el iframe (posible bloqueo por WAF)</span>';
+            statusText.innerHTML = "Error al cargar - Bloqueado por WAF/CORS";
+            statusText.style.color = "red";
         };
-
-        // Prueba alternativa con fetch
-        fetch('https://class.utp.edu.pe', { 
-            mode: 'no-cors',
-            credentials: 'omit'
-        })
-        .then(response => {
-            // Solo sabemos si la petición no fue bloqueada
-            console.log('Fetch recibió respuesta (no necesariamente exitosa)');
-        })
-        .catch(error => {
-            console.error('Error en fetch:', error);
-        });
     </script>
 </body>
 </html>
