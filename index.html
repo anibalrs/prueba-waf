@@ -33,19 +33,14 @@
             overflow: auto;
             background: #f9f9f9;
         }
-        .hidden {
-            display: none;
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
-    <iframe 
-        id="hidden-iframe" 
-        src="https://class.utp.edu.pe" 
-        sandbox="allow-same-origin"
-        onload="iframeLoaded()"
-    ></iframe>
-    
     <h1>Prueba de WAF</h1>
     <p>Intentando consumir recursos de <code>class.utp.edu.pe</code>...</p>
     
@@ -53,39 +48,60 @@
         Cargando...
     </div>
 
-    <div class="content-viewer hidden" id="content-viewer">
-        <h3>Contenido cargado:</h3>
-        <div id="iframe-content"></div>
+    <!-- Iframe visible para ver la carga completa -->
+    <iframe 
+        id="test-iframe" 
+        src="https://class.utp.edu.pe" 
+        sandbox="allow-scripts allow-same-origin"
+    ></iframe>
+
+    <div class="content-viewer">
+        <h3>Información de carga:</h3>
+        <div id="load-info"></div>
     </div>
 
     <script>
-        function iframeLoaded() {
+        const iframe = document.getElementById('test-iframe');
+        const statusDiv = document.getElementById('status');
+        const loadInfo = document.getElementById('load-info');
+        
+        iframe.onload = function() {
+            // Verificación básica de carga
+            statusDiv.innerHTML = '<span class="success">✅ El iframe cargó correctamente (no bloqueado por WAF)</span>';
+            
             try {
-                const iframe = document.getElementById('hidden-iframe');
-                const contentDiv = document.getElementById('iframe-content');
-                const viewer = document.getElementById('content-viewer');
-                
-                // Intentamos acceder al contenido del iframe
+                // Intento de acceso al contenido (puede fallar por CORS)
                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                contentDiv.innerHTML = iframeDoc.documentElement.innerHTML;
-                viewer.classList.remove('hidden');
-                
-                document.getElementById('status').innerHTML = 
-                    '<span class="success">✅ La petición a class.utp.edu.pe fue exitosa (no bloqueada por el WAF).</span>';
+                loadInfo.innerHTML = `
+                    <p><strong>URL cargada:</strong> ${iframe.src}</p>
+                    <p><strong>Título:</strong> ${iframeDoc.title}</p>
+                    <p><strong>Estado:</strong> Contenido cargado (JavaScript dependiente)</p>
+                    <p class="error">Nota: No se puede extraer el HTML completo debido a políticas de seguridad del navegador.</p>
+                `;
             } catch (error) {
-                document.getElementById('status').innerHTML = 
-                    `<span class="error">❌ No se pudo acceder al contenido del iframe (Política de mismo origen). Error: ${error}</span>`;
+                loadInfo.innerHTML = `
+                    <p><strong>URL cargada:</strong> ${iframe.src}</p>
+                    <p class="error">No se puede acceder al contenido del iframe debido a políticas de seguridad (CORS).</p>
+                    <p>El sitio está diseñado para funcionar con JavaScript.</p>
+                `;
             }
-        }
+        };
 
-        fetch('https://class.utp.edu.pe/', { 
-            mode: 'no-cors'
+        iframe.onerror = function() {
+            statusDiv.innerHTML = '<span class="error">❌ Error al cargar el iframe (posible bloqueo por WAF)</span>';
+        };
+
+        // Prueba alternativa con fetch
+        fetch('https://class.utp.edu.pe', { 
+            mode: 'no-cors',
+            credentials: 'omit'
         })
-        .then(() => {
+        .then(response => {
+            // Solo sabemos si la petición no fue bloqueada
+            console.log('Fetch recibió respuesta (no necesariamente exitosa)');
         })
-        .catch((error) => {
-            document.getElementById('status').innerHTML = 
-                `<span class="error">❌ La petición fue bloqueada (posiblemente por el WAF). Error: ${error}</span>`;
+        .catch(error => {
+            console.error('Error en fetch:', error);
         });
     </script>
 </body>
