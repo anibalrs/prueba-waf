@@ -34,9 +34,8 @@
     </div>
 
     <script>
-        // Intentamos hacer una petición a class.utp.edu.pe
         fetch('https://class.utp.edu.pe/', { 
-            mode: 'no-cors' // Para evitar problemas con CORS (aunque el WAF igual puede bloquearlo)
+            mode: 'no-cors'
         })
         .then(() => {
             document.getElementById('status').innerHTML = 
