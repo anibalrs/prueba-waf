@@ -1,52 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Verificador de Acceso entre Dominios</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Acceso Cross-Domain</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        iframe { 
-            width: 90%; 
-            height: 500px; 
-            border: 2px solid #3498db;
-            margin: 20px auto;
-            display: block;
-        }
-        .status {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            max-width: 600px;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .loading { background: #FFF3CD; color: #856404; }
+        .success { background: #D4EDDA; color: #155724; }
+        .error { background: #F8D7DA; color: #721C24; }
+        #web-container {
+            width: 100%;
+            height: 500px;
+            border: 2px dashed #ccc;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
 <body>
     <h1>Verificador de Acceso entre Dominios</h1>
+    <p>Comprobando si este dominio puede cargar:</p>
+    <input type="text" id="target-url" value="https://class.utp.edu.pe" style="width: 80%; padding: 8px;">
+    <button onclick="checkAccess()">Verificar</button>
+
+    <div id="status" class="loading">Presiona "Verificar" para comenzar</div>
     
-    <div class="status">
-        <p>Cargando <strong id="target-url">https://class.utp.edu.pe</strong></p>
-        <p id="status-text">🟡 Cargando...</p>
+    <div id="web-container">
+        <p>El contenido aparecerá aquí si es accesible</p>
     </div>
 
-    <iframe 
-        id="web-viewer" 
-        src="https://class.utp.edu.pe" 
-        sandbox="allow-scripts allow-same-origin"
-    ></iframe>
-
     <script>
-        const iframe = document.getElementById('web-viewer');
-        const statusText = document.getElementById('status-text');
+        function checkAccess() {
+            const url = document.getElementById('target-url').value;
+            const statusEl = document.getElementById('status');
+            const container = document.getElementById('web-container');
 
-        iframe.onload = function() {
-            statusText.innerHTML = "Iframe cargado - Puedes ver el contenido";
-            statusText.style.color = "green";
-        };
+            statusEl.className = "loading";
+            statusEl.textContent = "🔄 Verificando acceso...";
+            container.innerHTML = '<p>Cargando...</p>';
 
-        iframe.onerror = function() {
-            statusText.innerHTML = "Error al cargar - Bloqueado por WAF/CORS";
-            statusText.style.color = "red";
-        };
+            // Método 1: Usar fetch para detectar bloqueos (sin CORS)
+            fetch(url, { mode: 'no-cors' })
+                .then(() => {
+                    // Si pasa, intentamos cargar en iframe
+                    loadIframe(url, statusEl, container);
+                })
+                .catch(() => {
+                    statusEl.className = "error";
+                    statusEl.textContent = "🔴 Bloqueado: No se puede acceder (WAF/CORS)";
+                    container.innerHTML = '<p>El recurso está bloqueado por políticas de seguridad.</p>';
+                });
+        }
+
+        function loadIframe(url, statusEl, container) {
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            
+            iframe.onload = () => {
+                statusEl.className = "success";
+                statusEl.textContent = "Acceso permitido (carga visual)";
+            };
+            
+            iframe.onerror = () => {
+                statusEl.className = "error";
+                statusEl.textContent = " Error: El sitio no permite embedding (X-Frame-Options)";
+                container.innerHTML = '<p>El sitio no permite ser embebido en iframes.</p>';
+            };
+            
+            container.innerHTML = "";
+            container.appendChild(iframe);
+        }
     </script>
 </body>
 </html>
