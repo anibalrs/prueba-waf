@@ -3,89 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificador de Acceso Cross-Domain</title>
+    <title>Visualizador</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
         }
-        #status {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .loading { background: #FFF3CD; color: #856404; }
-        .success { background: #D4EDDA; color: #155724; }
-        .error { background: #F8D7DA; color: #721C24; }
-        #web-container {
+        #fullscreen-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 500px;
-            border: 2px dashed #ccc;
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 100%;
+            border: none;
+        }
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <h1>Verificador de Acceso entre Dominios</h1>
-    <p>Comprobando si este dominio puede cargar:</p>
-    <input type="text" id="target-url" value="https://class.utp.edu.pe" style="width: 80%; padding: 8px;">
-    <button onclick="checkAccess()">Verificar</button>
-
-    <div id="status" class="loading">Presiona "Verificar" para comenzar</div>
+    <div class="loader" id="loader">Cargando</div>
     
-    <div id="web-container">
-        <p>El contenido aparecerá aquí si es accesible</p>
-    </div>
+    <iframe 
+        id="fullscreen-iframe"
+        src="https://class.utp.edu.pe"
+        sandbox="allow-scripts allow-forms allow-same-origin"
+        allowfullscreen
+    ></iframe>
 
     <script>
-        function checkAccess() {
-            const url = document.getElementById('target-url').value;
-            const statusEl = document.getElementById('status');
-            const container = document.getElementById('web-container');
-
-            statusEl.className = "loading";
-            statusEl.textContent = "🔄 Verificando acceso...";
-            container.innerHTML = '<p>Cargando...</p>';
-
-            fetch(url, { mode: 'no-cors' })
-                .then(() => {
-                    loadIframe(url, statusEl, container);
-                })
-                .catch(() => {
-                    statusEl.className = "error";
-                    statusEl.textContent = "Bloqueado: No se puede acceder (WAF/CORS)";
-                    container.innerHTML = '<p>El recurso está bloqueado por políticas de seguridad.</p>';
-                });
-        }
-
-        function loadIframe(url, statusEl, container) {
-            const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "none";
-            
-            iframe.onload = () => {
-                statusEl.className = "success";
-                statusEl.textContent = "Acceso permitido (carga visual)";
-            };
-            
-            iframe.onerror = () => {
-                statusEl.className = "error";
-                statusEl.textContent = " Error: El sitio no permite embedding (X-Frame-Options)";
-                container.innerHTML = '<p>El sitio no permite ser embebido en iframes.</p>';
-            };
-            
-            container.innerHTML = "";
-            container.appendChild(iframe);
-        }
+        document.getElementById('fullscreen-iframe').onload = function() {
+            document.getElementById('loader').style.display = 'none';
+        };
     </script>
 </body>
 </html>
