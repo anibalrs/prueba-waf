@@ -1,9 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Validador de Acceso</title>
+    <title>Validador de EndPoint</title>
+    <style>
+    #result {
+      padding: 20px;
+      margin: 20px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello My Friends</h1>
+  <h1>PRUEBA ENDPOINT</h1>
+  <div id="result">Ejecutando prueba...</div>
+
+  <script>
+    const endpoint = "http://internal-UTP-AOPE-ALB-DEV-01-118910829.us-east-1.elb.amazonaws.com:3059/health";
+
+    const resultDiv = document.getElementById("result");
+
+    fetch(endpoint)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        resultDiv.className = "success";
+        resultDiv.innerHTML = `
+          ✅ Petición exitosa<br>
+          <strong>Descripción:</strong> Se recibió la respuesta correctamente.
+        `;
+        console.log("Datos recibidos:", data);
+      })
+      .catch(error => {
+        resultDiv.className = "error";
+        resultDiv.innerHTML = `
+          ❌ Error en la petición<br>
+          <strong>Descripción:</strong> ${error.message}
+        `;
+        console.error("Error:", error);
+      });
+  </script>
 </body>
 </html>
