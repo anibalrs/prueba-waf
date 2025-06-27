@@ -54,15 +54,13 @@
             statusEl.textContent = "🔄 Verificando acceso...";
             container.innerHTML = '<p>Cargando...</p>';
 
-            // Método 1: Usar fetch para detectar bloqueos (sin CORS)
             fetch(url, { mode: 'no-cors' })
                 .then(() => {
-                    // Si pasa, intentamos cargar en iframe
                     loadIframe(url, statusEl, container);
                 })
                 .catch(() => {
                     statusEl.className = "error";
-                    statusEl.textContent = "🔴 Bloqueado: No se puede acceder (WAF/CORS)";
+                    statusEl.textContent = "Bloqueado: No se puede acceder (WAF/CORS)";
                     container.innerHTML = '<p>El recurso está bloqueado por políticas de seguridad.</p>';
                 });
         }
