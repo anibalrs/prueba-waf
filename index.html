@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba WAF - Consumiendo class.utp.edu.pe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .status {
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de WAF</h1>
+    <p>Intentando consumir recursos de <code>class.utp.edu.pe</code>...</p>
+    
+    <div class="status" id="status">
+        Cargando...
+    </div>
+
+    <script>
+        // Intentamos hacer una petición a class.utp.edu.pe
+        fetch('https://class.utp.edu.pe/', { 
+            mode: 'no-cors' // Para evitar problemas con CORS (aunque el WAF igual puede bloquearlo)
+        })
+        .then(() => {
+            document.getElementById('status').innerHTML = 
+                '<span class="success">✅ La petición a class.utp.edu.pe fue exitosa (no bloqueada por el WAF).</span>';
+        })
+        .catch((error) => {
+            document.getElementById('status').innerHTML = 
+                `<span class="error">❌ La petición fue bloqueada (posiblemente por el WAF). Error: ${error}</span>`;
+        });
+    </script>
+</body>
+</html>
