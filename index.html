@@ -5,35 +5,11 @@
     <style>
         #result { padding: 20px; margin: 20px; border-radius: 5px; }
         .success { background: #d4edda; }
-        .error { background: #f8d7da; }
+        .error { background: #f8d7da; 
+        .h1 { background: red }
     </style>
 </head>
 <body>
-    <h2>Prueba de acceso a class.utp.edu.pe</h2>
-    <div id="result">Ejecutando pruebas...</div>
-
-    <script>
-        const tests = [
-            { name: "Fetch básico", url: "https://class.utp.edu.pe" }
-        ];
-
-        const runTests = async () => {
-            const results = [];
-            
-            for (const test of tests) {
-                try {
-                    await fetch(test.url, { mode: 'no-cors' });
-                    results.push(`✅ ${test.name}: Petición no bloqueada`);
-                } catch (error) {
-                    results.push(`❌ ${test.name}: ${error.message}`);
-                }
-            }
-
-            document.getElementById('result').innerHTML = results.join('<br>');
-            document.getElementById('result').className = results.some(r => r.includes('❌')) ? 'error' : 'success';
-        };
-
-        runTests();
-    </script>
+    <h1>Hello My Friends</h1>
 </body>
 </html>
