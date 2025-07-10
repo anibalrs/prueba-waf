@@ -1,58 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Validador de EndPoint</title>
-    <style>
-    #result {
+  <meta charset="utf-8" />
+  <title>Prueba CORS API Gateway + Lambda</title>
+  <style>
+    body {
+      font-family: sans-serif;
       padding: 20px;
-      margin: 20px;
-      border-radius: 5px;
-      font-family: Arial, sans-serif;
     }
-    .success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+    button {
+      padding: 8px 16px;
+      margin-right: 10px;
+      cursor: pointer;
     }
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>PRUEBA ENDPOINT</h1>
-  <div id="result">Ejecutando prueba...</div>
+  <h2>Prueba de CORS API Gateway + Lambda</h2>
+  <p>Se hace una llamada automática al cargar la página.<br>
+     También puedes hacer clic en los botones para repetir la prueba.</p>
+  <button id="btnGet">Probar GET</button>
+  <button id="btnPost">Probar POST</button>
+  <pre id="resultado">Esperando llamada...</pre>
 
   <script>
-    const endpoint = "https://api-postulante-dev.utpxpedition.com/web/documentos-admision/v1/health";
+    // Cambia esta URL por la tuya si es necesario
+    const apiUrl = 'https://api-estacionamientos-dev.utpxpedition.com/datos-maestros-test';
 
-    const resultDiv = document.getElementById("result");
+    const resultado = document.getElementById('resultado');
 
-    fetch(endpoint)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        resultDiv.className = "success";
-        resultDiv.innerHTML = `
-          ✅ Petición exitosa<br>
-          <strong>Descripción:</strong> Se recibió la respuesta correctamente.
-        `;
-        console.log("Datos recibidos:", data);
-      })
-      .catch(error => {
-        resultDiv.className = "error";
-        resultDiv.innerHTML = `
-          ❌ Error en la petición<br>
-          <strong>Descripción:</strong> ${error.message}
-        `;
-        console.error("Error:", error);
-      });
+    async function probarGet() {
+      resultado.textContent = "Haciendo GET...";
+      console.log("Haciendo GET a:", apiUrl);
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'GET'
+        });
+        const data = await res.text();
+        resultado.textContent = "Status: " + res.status + "\n\n" + data;
+        console.log("Respuesta GET:", data);
+      } catch (err) {
+        resultado.textContent = "ERROR:\n" + err;
+        console.error("Error GET:", err);
+      }
+    }
+
+    async function probarPost() {
+      resultado.textContent = "Haciendo POST...";
+      console.log("Haciendo POST a:", apiUrl);
+      try {
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prueba: true })
+        });
+        const data = await res.text();
+        resultado.textContent = "Status: " + res.status + "\n\n" + data;
+        console.log("Respuesta POST:", data);
+      } catch (err) {
+        resultado.textContent = "ERROR:\n" + err;
+        console.error("Error POST:", err);
+      }
+    }
+
+    document.getElementById('btnGet').addEventListener('click', probarGet);
+    document.getElementById('btnPost').addEventListener('click', probarPost);
+
+    // Ejecutar automáticamente al cargar
+    window.addEventListener('load', probarGet);
   </script>
 </body>
 </html>
+
