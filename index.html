@@ -5,87 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de CSP</title>
     <style>
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #4CAF50;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+            --light-gray: #f5f5f5;
+            --medium-gray: #ddd;
+            --dark-gray: #333;
+            --white: #fff;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 15px;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
         }
+        
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            background-color: white;
+            background-color: var(--white);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        
         h1 {
-            color: #333;
+            color: var(--dark-gray);
             text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-top: 0;
         }
+        
         .directive-block {
             margin-bottom: 15px;
             padding: 15px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--medium-gray);
             border-radius: 5px;
             background-color: #f9f9f9;
         }
+        
         .directive-header {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            gap: 10px;
         }
+        
         .directive-name {
             font-weight: bold;
             font-size: 1.1em;
+            word-break: break-word;
         }
+        
         .remove-btn {
-            background-color: #ff4444;
-            color: white;
+            background-color: var(--danger-color);
+            color: var(--white);
             border: none;
             padding: 5px 10px;
             border-radius: 3px;
             cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
         }
+        
         .remove-btn:hover {
-            background-color: #cc0000;
+            opacity: 0.9;
         }
+        
         textarea {
             width: 100%;
             min-height: 60px;
-            padding: 8px;
-            border: 1px solid #ddd;
+            padding: 10px;
+            border: 1px solid var(--medium-gray);
             border-radius: 4px;
             resize: vertical;
+            font-family: monospace;
+            font-size: 14px;
         }
+        
         .buttons {
             margin: 20px 0;
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
         }
+        
         button {
             padding: 10px 15px;
-            margin: 0 5px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
         #addDirective {
-            background-color: #4CAF50;
-            color: white;
+            background-color: var(--secondary-color);
+            color: var(--white);
         }
-        #addDirective:hover {
-            background-color: #45a049;
-        }
+        
         #generateCSP {
-            background-color: #2196F3;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--white);
         }
-        #generateCSP:hover {
-            background-color: #0b7dda;
-        }
+        
         #result {
             margin-top: 20px;
             padding: 15px;
@@ -94,40 +134,114 @@
             border-radius: 5px;
             display: none;
         }
+        
         #resultText {
             font-family: monospace;
             white-space: pre-wrap;
             word-wrap: break-word;
+            background-color: var(--white);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
         }
+        
         .copy-btn {
-            background-color: #ff9800;
-            color: white;
+            background-color: var(--warning-color);
+            color: var(--white);
+            margin-top: 10px;
         }
-        .copy-btn:hover {
-            background-color: #e68a00;
-        }
+        
         .directive-selector {
             margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
+        
         select {
-            padding: 8px;
+            padding: 8px 12px;
             border-radius: 4px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--medium-gray);
+            font-size: 16px;
+            flex-grow: 1;
+            min-width: 200px;
         }
+        
         #initialCSP {
             width: 100%;
-            min-height: 100px;
+            min-height: 120px;
             margin-bottom: 15px;
+            font-family: monospace;
         }
+        
         .initial-controls {
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
+        
+        .initial-controls button {
+            flex: 1 1 200px;
+        }
+        
         .section-title {
             font-size: 1.2em;
             font-weight: bold;
             margin: 20px 0 10px 0;
             padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        #clearAll {
+            background-color: var(--danger-color);
+            color: var(--white);
+        }
+        
+        #parseCSP {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .directive-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .directive-selector select, 
+            .directive-selector button {
+                width: 100%;
+            }
+            
+            button {
+                padding: 12px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+            
+            .directive-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .remove-btn {
+                align-self: flex-end;
+            }
         }
     </style>
 </head>
@@ -136,10 +250,12 @@
         <h1>Generador de Política de Seguridad de Contenido (CSP)</h1>
         
         <div class="initial-controls">
-            <div class="section-title">Paso 1: Ingresa tu CSP actual</div>
-            <textarea id="initialCSP" placeholder="Pega aquí tu política CSP actual para editarla..."></textarea>
+            <div style="width: 100%;">
+                <div class="section-title">Paso 1: Ingresa tu CSP actual</div>
+                <textarea id="initialCSP" placeholder="Pega aquí tu política CSP actual para editarla..."></textarea>
+            </div>
             <button id="parseCSP">Cargar CSP</button>
-            <button id="clearAll" style="background-color: #f44336; color: white;">Limpiar Todo</button>
+            <button id="clearAll">Limpiar Todo</button>
         </div>
         
         <div class="section-title">Paso 2: Edita tus directivas</div>
@@ -188,7 +304,9 @@
 
             // Manejar clic en "Limpiar Todo"
             document.getElementById('clearAll').addEventListener('click', function() {
-                clearAllDirectives();
+                if(confirm('¿Estás seguro de que quieres limpiar todo? Perderás todos los cambios.')) {
+                    clearAllDirectives();
+                }
             });
 
             // Manejar clic en "Agregar Directiva"
@@ -274,7 +392,9 @@
 
                 // Agregar evento al botón de eliminar
                 directiveBlock.querySelector('.remove-btn').addEventListener('click', function() {
-                    document.getElementById(directiveId).remove();
+                    if(confirm('¿Eliminar esta directiva?')) {
+                        document.getElementById(directiveId).remove();
+                    }
                 });
             }
 
@@ -292,9 +412,17 @@
                     }
                 });
 
+                if(cspParts.length === 0) {
+                    alert('No hay directivas para generar. Agrega al menos una directiva.');
+                    return;
+                }
+
                 const cspString = cspParts.join('; ');
                 document.getElementById('resultText').textContent = cspString + (cspParts.length > 0 ? ';' : '');
                 document.getElementById('result').style.display = 'block';
+                
+                // Hacer scroll al resultado
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
             }
 
             // Función para copiar al portapapeles
