@@ -1,81 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Prueba CORS API Gateway + Lambda</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-    }
-    button {
-      padding: 8px 16px;
-      margin-right: 10px;
-      cursor: pointer;
-    }
-    pre {
-      background: #f0f0f0;
-      padding: 10px;
-      white-space: pre-wrap;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de CSP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .directive-block {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .directive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .directive-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .remove-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background-color: #cc0000;
+        }
+        textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .buttons {
+            margin: 20px 0;
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #addDirective {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #addDirective:hover {
+            background-color: #45a049;
+        }
+        #generateCSP {
+            background-color: #2196F3;
+            color: white;
+        }
+        #generateCSP:hover {
+            background-color: #0b7dda;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7fe;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            display: none;
+        }
+        #resultText {
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+        .copy-btn:hover {
+            background-color: #e68a00;
+        }
+        .directive-selector {
+            margin-bottom: 15px;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        #initialCSP {
+            width: 100%;
+            min-height: 100px;
+            margin-bottom: 15px;
+        }
+        .initial-controls {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
-  <h2>Prueba de CORS API Gateway + Lambda</h2>
-  <p>Se hace una llamada automática al cargar la página.<br>
-     También puedes hacer clic en los botones para repetir la prueba.</p>
-  <button id="btnGet">Probar GET</button>
-  <button id="btnPost">Probar POST</button>
-  <pre id="resultado">Esperando llamada...</pre>
+    <div class="container">
+        <h1>Generador de Política de Seguridad de Contenido (CSP)</h1>
+        
+        <div class="initial-controls">
+            <div class="section-title">Paso 1: Ingresa tu CSP actual</div>
+            <textarea id="initialCSP" placeholder="Pega aquí tu política CSP actual para editarla..."></textarea>
+            <button id="parseCSP">Cargar CSP</button>
+            <button id="clearAll" style="background-color: #f44336; color: white;">Limpiar Todo</button>
+        </div>
+        
+        <div class="section-title">Paso 2: Edita tus directivas</div>
+        <div id="directivesContainer">
+            <!-- Las directivas CSP se agregarán aquí -->
+        </div>
+        
+        <div class="directive-selector">
+            <select id="directiveType">
+                <option value="default-src">default-src</option>
+                <option value="script-src">script-src</option>
+                <option value="connect-src">connect-src</option>
+                <option value="img-src">img-src</option>
+                <option value="style-src">style-src</option>
+                <option value="base-uri">base-uri</option>
+                <option value="form-action">form-action</option>
+                <option value="font-src">font-src</option>
+                <option value="frame-src">frame-src</option>
+                <option value="frame-ancestors">frame-ancestors</option>
+                <option value="media-src">media-src</option>
+                <option value="object-src">object-src</option>
+                <option value="worker-src">worker-src</option>
+                <option value="child-src">child-src</option>
+                <option value="manifest-src">manifest-src</option>
+            </select>
+            <button id="addDirective">Agregar Directiva</button>
+        </div>
+        
+        <div class="buttons">
+            <button id="generateCSP">Generar CSP</button>
+        </div>
+        
+        <div id="result">
+            <h3>Tu política CSP generada:</h3>
+            <div id="resultText"></div>
+            <button id="copyCSP" class="copy-btn">Copiar CSP</button>
+        </div>
+    </div>
 
-  <script>
-    // Cambia esta URL por la tuya si es necesario
-    const apiUrl = 'https://api-estacionamientos-dev.utpxpedition.com/datos-maestros-test';
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Manejar clic en "Cargar CSP"
+            document.getElementById('parseCSP').addEventListener('click', function() {
+                parseInitialCSP();
+            });
 
-    const resultado = document.getElementById('resultado');
+            // Manejar clic en "Limpiar Todo"
+            document.getElementById('clearAll').addEventListener('click', function() {
+                clearAllDirectives();
+            });
 
-    async function probarGet() {
-      resultado.textContent = "Haciendo GET...";
-      console.log("Haciendo GET a:", apiUrl);
-      try {
-        const res = await fetch(apiUrl, {
-          method: 'GET'
+            // Manejar clic en "Agregar Directiva"
+            document.getElementById('addDirective').addEventListener('click', function() {
+                const directiveType = document.getElementById('directiveType').value;
+                addDirective(directiveType, '');
+            });
+
+            // Manejar clic en "Generar CSP"
+            document.getElementById('generateCSP').addEventListener('click', function() {
+                generateCSP();
+            });
+
+            // Manejar clic en "Copiar CSP"
+            document.getElementById('copyCSP').addEventListener('click', function() {
+                copyToClipboard(document.getElementById('resultText').textContent);
+                alert('CSP copiado al portapapeles!');
+            });
+
+            // Función para parsear el CSP inicial
+            function parseInitialCSP() {
+                const initialCSP = document.getElementById('initialCSP').value.trim();
+                if (!initialCSP) {
+                    alert('Por favor ingresa un CSP para analizar');
+                    return;
+                }
+
+                // Limpiar directivas existentes
+                clearAllDirectives();
+
+                // Dividir el CSP en directivas individuales
+                const directives = initialCSP.split(';').map(d => d.trim()).filter(d => d);
+
+                // Procesar cada directiva
+                directives.forEach(directive => {
+                    const spaceIndex = directive.indexOf(' ');
+                    if (spaceIndex === -1) return;
+
+                    const name = directive.substring(0, spaceIndex).trim();
+                    const value = directive.substring(spaceIndex + 1).trim();
+
+                    addDirective(name, value);
+                });
+            }
+
+            // Función para limpiar todas las directivas
+            function clearAllDirectives() {
+                document.getElementById('directivesContainer').innerHTML = '';
+                document.getElementById('initialCSP').value = '';
+                document.getElementById('result').style.display = 'none';
+            }
+
+            // Función para agregar una nueva directiva
+            function addDirective(name, value) {
+                // Verificar si la directiva ya existe
+                const existingDirectives = document.querySelectorAll('.directive-name');
+                for (let i = 0; i < existingDirectives.length; i++) {
+                    if (existingDirectives[i].textContent === name) {
+                        // Actualizar el valor existente
+                        const directiveId = existingDirectives[i].closest('.directive-block').id;
+                        document.getElementById(`${directiveId}-value`).value = value;
+                        return;
+                    }
+                }
+
+                // Si no existe, crear nueva directiva
+                const container = document.getElementById('directivesContainer');
+                const directiveId = 'directive-' + Date.now();
+
+                const directiveBlock = document.createElement('div');
+                directiveBlock.className = 'directive-block';
+                directiveBlock.id = directiveId;
+
+                directiveBlock.innerHTML = `
+                    <div class="directive-header">
+                        <span class="directive-name">${name}</span>
+                        <button class="remove-btn" data-directive="${directiveId}">Eliminar</button>
+                    </div>
+                    <textarea id="${directiveId}-value" placeholder="Ingresa los valores para ${name} (separados por espacios)">${value}</textarea>
+                `;
+
+                container.appendChild(directiveBlock);
+
+                // Agregar evento al botón de eliminar
+                directiveBlock.querySelector('.remove-btn').addEventListener('click', function() {
+                    document.getElementById(directiveId).remove();
+                });
+            }
+
+            // Función para generar el CSP
+            function generateCSP() {
+                const directiveBlocks = document.querySelectorAll('.directive-block');
+                let cspParts = [];
+
+                directiveBlocks.forEach(block => {
+                    const name = block.querySelector('.directive-name').textContent;
+                    const value = block.querySelector('textarea').value.trim();
+                    
+                    if (value) {
+                        cspParts.push(`${name} ${value}`);
+                    }
+                });
+
+                const cspString = cspParts.join('; ');
+                document.getElementById('resultText').textContent = cspString + (cspParts.length > 0 ? ';' : '');
+                document.getElementById('result').style.display = 'block';
+            }
+
+            // Función para copiar al portapapeles
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
         });
-        const data = await res.text();
-        resultado.textContent = "Status: " + res.status + "\n\n" + data;
-        console.log("Respuesta GET:", data);
-      } catch (err) {
-        resultado.textContent = "ERROR:\n" + err;
-        console.error("Error GET:", err);
-      }
-    }
-
-    async function probarPost() {
-      resultado.textContent = "Haciendo POST...";
-      console.log("Haciendo POST a:", apiUrl);
-      try {
-        const res = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prueba: true })
-        });
-        const data = await res.text();
-        resultado.textContent = "Status: " + res.status + "\n\n" + data;
-        console.log("Respuesta POST:", data);
-      } catch (err) {
-        resultado.textContent = "ERROR:\n" + err;
-        console.error("Error POST:", err);
-      }
-    }
-
-    document.getElementById('btnGet').addEventListener('click', probarGet);
-    document.getElementById('btnPost').addEventListener('click', probarPost);
-
-    // Ejecutar automáticamente al cargar
-    window.addEventListener('load', probarGet);
-  </script>
+    </script>
 </body>
 </html>
 
