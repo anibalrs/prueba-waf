@@ -53,24 +53,19 @@
                 
                 <div class="form-group">
                     <label for="clusterName">Nombre del Cluster *</label>
-                    <input type="text" id="clusterName" class="form-control" placeholder="Ej: UTP-A200-ECS-PRD-00-Class" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="appName">Nombre de la Aplicación/Proyecto *</label>
-                    <input type="text" id="appName" class="form-control" placeholder="Ej: A200" required>
+                    <input type="text" id="clusterName" class="form-control" placeholder="Ej: (entidad)-(codigo aplicacion)-ECS-(entorno)-00-(nombre aplicacion)" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="appDisplayName">Nombre para Mostrar *</label>
-                    <input type="text" id="appDisplayName" class="form-control" placeholder="Ej: UTP-A200-Class" required>
+                    <input type="text" id="appDisplayName" class="form-control" placeholder="Ej: (entidad)-(codigo aplicacion)-(nombre aplicacion)" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Servicios *</label>
                     <div class="services-container" id="servicesContainer">
                         <div class="service-item">
-                            <input type="text" class="form-control service-input" placeholder="Ej: course-batch" required>
+                            <input type="text" class="form-control service-input" placeholder="Ej: ms-course" required>
                             <button class="btn btn-remove remove-service"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>

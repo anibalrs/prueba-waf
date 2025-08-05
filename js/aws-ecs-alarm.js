@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Evento para generar comando
     generateBtn.addEventListener('click', function() {
         // Validar campos obligatorios
-        const requiredFields = ['metricType', 'clusterName', 'appName', 'appDisplayName'];
+        const requiredFields = ['metricType', 'clusterName', 'appDisplayName'];
         let isValid = true;
         
         requiredFields.forEach(field => {
@@ -186,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obtener valores del formulario
         const metricType = document.getElementById('metricType').value;
         const clusterName = document.getElementById('clusterName').value;
-        const appName = document.getElementById('appName').value;
         const appDisplayName = document.getElementById('appDisplayName').value;
         
         // Crear array de servicios
@@ -214,17 +213,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Generar el comando
         let command = `#!/bin/bash\n\n`;
-        command += `cluster="${clusterName}"\n`;
-        command += `aplicacion="${appName}"\n`;
-        command += `nombreApp="${appDisplayName}"\n\n`;
-        
+
         command += `json_servicios='${jsonServices}'\n\n`;
         
         command += `echo "$json_servicios" | jq -r '.[]' | while read nombre; do\n`;
         command += `  descripcion="La alarma se activa si ${metricType === 'CPUUtilization' ? 'el CPU' : 'la memoria'} del servicio \${nombre} supera el ${threshold}% durante ${period} segundos."\n\n`;
         
         command += `  aws cloudwatch put-metric-alarm \\\n`;
-        command += `    --alarm-name "\${nombreApp}-\${nombre}-${metricType.replace('Utilization', '')}" \\\n`;
+        command += `    --alarm-name "${appDisplayName}-\${nombre}-${metricType.replace('Utilization', '')}" \\\n`;
         command += `    --metric-name ${metricType} \\\n`;
         command += `    --namespace AWS/ECS \\\n`;
         command += `    --statistic ${statistic} \\\n`;
@@ -233,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         command += `    --comparison-operator GreaterThanThreshold \\\n`;
         command += `    --evaluation-periods 1 \\\n`;
         command += `    --datapoints-to-alarm 1 \\\n`;
-        command += `    --dimensions Name=ClusterName,Value=\$cluster Name=ServiceName,Value=\$nombre \\\n`;
+        command += `    --dimensions Name=ClusterName,Value=${clusterName} Name=ServiceName,Value=\$nombre \\\n`;
         command += `    --treat-missing-data missing \\\n`;
         command += `    --unit ${unit}`;
         
@@ -241,14 +237,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (actions.length > 0) {
             command += ` \\\n    --actions-enabled \\\n    --alarm-actions ${actions.join(' ')}`;
         }
-        
-        // Agregar tags si existen
+        // Agregar tags - incluyendo el tag de descripción por defecto
+        command += ` \\\n    --tags Key=t.aplicacionDescripcion,Value="\\$descripcion"`;
+    
+        // Agregar tags adicionales si existen
         if (tags.length > 0) {
-            command += ` \\\n    --tags`;
             tags.forEach(tag => {
                 command += ` Key=${tag.key},Value=${tag.value}`;
             });
         }
+    
+        // // Agregar tags si existen
+        // if (tags.length > 0) {
+        //     command += ` \\\n    --tags`;
+        //     tags.forEach(tag => {
+        //         command += ` Key=${tag.key},Value=${tag.value}`;
+        //     });
+        // }
         
         command += `\n\n`;
         command += `  echo "✅ Alarma creada para \$nombre"\n`;
