@@ -1,0 +1,68 @@
+/* Estilos específicos para AWS */
+.aws-hero {
+    background: linear-gradient(135deg, #232F3E, #FF9900);
+}
+
+.aws-service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.aws-command-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    padding: 20px;
+    text-align: center;
+}
+
+.aws-command-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.aws-service-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+}
+
+.aws-btn {
+    background-color: #FF9900;
+    margin-top: 15px;
+}
+
+.aws-btn:hover {
+    background-color: #e68a00;
+}
+
+/* Estilos para el generador de alarmas */
+.alarm-generator-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .aws-service-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .alarm-generator-container {
+        padding: 20px;
+    }
+}
