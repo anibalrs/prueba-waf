@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herramientas de Seguridad Web</title>
+    <title>DevTools Hub - Herramientas para Desarrolladores</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -12,8 +12,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>WebSec Tools</span>
+                    <i class="fas fa-toolbox"></i>
+                    <span>DevTools Hub</span>
                 </div>
                 <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
@@ -21,9 +21,10 @@
                 <nav class="nav-menu" id="navMenu">
                     <ul>
                         <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
-                        <li><a href="#tools"><i class="fas fa-tools"></i> Herramientas</a></li>
-                        <li><a href="#"><i class="fas fa-book"></i> Documentación</a></li>
-                        <li><a href="#"><i class="fas fa-envelope"></i> Contacto</a></li>
+                        <li><a href="#security"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+                        <li><a href="#cloud"><i class="fas fa-cloud"></i> Cloud</a></li>
+                        <li><a href="#code"><i class="fas fa-code"></i> Desarrollo</a></li>
+                        <li><a href="#docs"><i class="fas fa-book"></i> Documentación</a></li>
                     </ul>
                 </nav>
             </div>
@@ -32,84 +33,158 @@
     
     <section class="hero">
         <div class="container">
-            <h1>Herramientas de Seguridad Web para Desarrolladores</h1>
-            <p>Mejora la seguridad de tus aplicaciones web con nuestras herramientas gratuitas y fáciles de usar. Genera políticas de seguridad, prueba configuraciones y protege tus sitios.</p>
-            <a href="#tools" class="btn btn-secondary">Explorar Herramientas</a>
+            <h1>Central de Herramientas para Desarrolladores</h1>
+            <p>Accede a todas las utilidades que necesitas en un solo lugar: seguridad web, comandos cloud, generadores de código y más.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Buscar herramientas...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
         </div>
     </section>
     
-    <section class="features" id="tools">
+    <!-- Sección de Seguridad -->
+    <section class="category-section" id="security">
         <div class="container">
             <div class="section-title">
-                <h2>Nuestras Herramientas</h2>
+                <h2><i class="fas fa-shield-alt"></i> Herramientas de Seguridad</h2>
+                <p>Protege tus aplicaciones con estas utilidades</p>
             </div>
             
             <div class="tools-grid">
                 <div class="tool-card">
-                    <div class="tool-icon">
+                    <div class="tool-icon" style="background-color: #2196F3;">
                         <i class="fas fa-file-contract"></i>
                     </div>
                     <div class="tool-content">
                         <h3>Generador CSP</h3>
-                        <p>Crea y personaliza políticas de seguridad de contenido (CSP) para proteger tu sitio contra ataques XSS, inyección de datos y otros vectores de ataque.</p>
-                        <a href="csp-generator.html" class="btn">Usar Herramienta</a>
+                        <p>Crea y personaliza políticas de seguridad de contenido para proteger contra XSS e inyecciones.</p>
+                        <a href="csp-generator.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
                 
                 <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-lock"></i>
+                    <div class="tool-icon" style="background-color: #4CAF50;">
+                        <i class="fas fa-header"></i>
                     </div>
                     <div class="tool-content">
                         <h3>Analizador de Cabeceras</h3>
-                        <p>Próximamente: Analiza las cabeceras de seguridad HTTP de tu sitio web y recibe recomendaciones para mejorarlas.</p>
-                        <button class="btn" disabled>Próximamente</button>
+                        <p>Inspecciona y mejora las cabeceras HTTP de seguridad de tu sitio web.</p>
+                        <a href="headers-analyzer.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
                 
                 <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-search"></i>
+                    <div class="tool-icon" style="background-color: #9C27B0;">
+                        <i class="fas fa-lock"></i>
                     </div>
                     <div class="tool-content">
-                        <h3>Escáner de Vulnerabilidades</h3>
-                        <p>Próximamente: Escanea tu sitio web en busca de vulnerabilidades comunes y recibe un reporte detallado.</p>
-                        <button class="btn" disabled>Próximamente</button>
+                        <h3>Generador de Tokens JWT</h3>
+                        <p>Crea y decodifica tokens JWT para tu autenticación.</p>
+                        <a href="jwt-generator.html" class="btn">Abrir Herramienta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de Cloud -->
+    <section class="category-section" id="cloud">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-cloud"></i> Herramientas Cloud</h2>
+                <p>Comandos y utilidades para plataformas en la nube</p>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon" style="background-color: #FF9800;">
+                        <i class="fab fa-aws"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>AWS Cloud Shell</h3>
+                        <p>Colección de comandos útiles para AWS CLI y gestión de recursos.</p>
+                        <a href="aws-commands.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
                 
                 <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-key"></i>
+                    <div class="tool-icon" style="background-color: #4285F4;">
+                        <i class="fab fa-google"></i>
                     </div>
                     <div class="tool-content">
-                        <h3>Generador de Tokens</h3>
-                        <p>Próximamente: Genera tokens CSRF, JWT y otros tipos de tokens de seguridad para tus aplicaciones.</p>
-                        <button class="btn" disabled>Próximamente</button>
+                        <h3>Google Cloud Cheatsheet</h3>
+                        <p>Comandos esenciales para GCP y Firebase.</p>
+                        <a href="gcp-commands.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
                 
                 <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-code"></i>
+                    <div class="tool-icon" style="background-color: #00BCD4;">
+                        <i class="fab fa-microsoft"></i>
                     </div>
                     <div class="tool-content">
-                        <h3>Validador de HTML</h3>
-                        <p>Próximamente: Valida tu código HTML para detectar posibles problemas de seguridad y compatibilidad.</p>
-                        <button class="btn" disabled>Próximamente</button>
+                        <h3>Azure CLI Reference</h3>
+                        <p>Guía rápida de comandos Azure PowerShell y CLI.</p>
+                        <a href="azure-commands.html" class="btn">Abrir Herramienta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de Desarrollo -->
+    <section class="category-section" id="code">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-code"></i> Herramientas de Desarrollo</h2>
+                <p>Utilidades para el flujo de trabajo de desarrollo</p>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon" style="background-color: #E91E63;">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Generador de Componentes</h3>
+                        <p>Crea componentes reutilizables para React, Angular o Vue.</p>
+                        <a href="component-generator.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
                 
                 <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-shield-virus"></i>
+                    <div class="tool-icon" style="background-color: #3F51B5;">
+                        <i class="fas fa-database"></i>
                     </div>
                     <div class="tool-content">
-                        <h3>Pruebas de Seguridad</h3>
-                        <p>Próximamente: Realiza pruebas básicas de seguridad contra tu sitio web para identificar vulnerabilidades comunes.</p>
-                        <button class="btn" disabled>Próximamente</button>
+                        <h3>Constructor de Consultas SQL</h3>
+                        <p>Genera consultas SQL complejas visualmente.</p>
+                        <a href="sql-builder.html" class="btn">Abrir Herramienta</a>
                     </div>
                 </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon" style="background-color: #009688;">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Conversor de Formatos</h3>
+                        <p>Convierte entre JSON, XML, YAML y otros formatos.</p>
+                        <a href="format-converter.html" class="btn">Abrir Herramienta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="quick-access">
+        <div class="container">
+            <h3>Acceso Rápido</h3>
+            <div class="quick-links">
+                <a href="#" class="quick-link"><i class="fas fa-history"></i> Recientes</a>
+                <a href="#" class="quick-link"><i class="fas fa-star"></i> Favoritos</a>
+                <a href="#" class="quick-link"><i class="fas fa-bolt"></i> Más Usadas</a>
+                <a href="#" class="quick-link"><i class="fas fa-plus"></i> Añadir Herramienta</a>
             </div>
         </div>
     </section>
@@ -118,16 +193,35 @@
         <div class="container">
             <div class="footer-content">
                 <div class="logo">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>WebSec Tools</span>
+                    <i class="fas fa-toolbox"></i>
+                    <span>DevTools Hub</span>
                 </div>
-                <p>Herramientas gratuitas para desarrolladores preocupados por la seguridad web.</p>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Categorías</h4>
+                        <a href="#security">Seguridad</a>
+                        <a href="#cloud">Cloud</a>
+                        <a href="#code">Desarrollo</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <a href="#">Documentación</a>
+                        <a href="#">API</a>
+                        <a href="#">Contribuir</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Términos</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-github"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
                 </div>
-                <p class="copyright">© 2023 WebSec Tools. Todos los derechos reservados.</p>
+                <p class="copyright">© 2023 DevTools Hub. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
