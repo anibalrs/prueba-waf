@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Cloud Alarm Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/aws-ecs-alarm.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-toolbox"></i>
+                    <span>DevTools Hub</span>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="../index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="../index.html#security"><i class="fas fa-shield-alt"></i> Seguridad</a></li>
+                        <li><a href="../index.html#cloud"><i class="fas fa-cloud"></i> Cloud</a></li>
+                        <li><a href="../index.html#code"><i class="fas fa-code"></i> Desarrollo</a></li>
+                        <li><a href="../index.html#docs"><i class="fas fa-book"></i> Documentación</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>AWS Cloud Alarm Generator</h1>
+            <p>Genera comandos para crear alarmas CloudWatch en tus servicios ECS</p>
+        </div>
+    </section>
+    
+    <section class="category-section">
+        <div class="container">
+            <div class="command-generator">
+                <div class="form-group">
+                    <label for="metricType">Tipo de Métrica *</label>
+                    <select id="metricType" class="form-control" required>
+                        <option value="">Seleccione una métrica</option>
+                        <option value="CPUUtilization">CPUUtilization</option>
+                        <option value="MemoryUtilization">MemoryUtilization</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="clusterName">Nombre del Cluster *</label>
+                    <input type="text" id="clusterName" class="form-control" placeholder="Ej: UTP-A200-ECS-PRD-00-Class" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appName">Nombre de la Aplicación/Proyecto *</label>
+                    <input type="text" id="appName" class="form-control" placeholder="Ej: A200" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appDisplayName">Nombre para Mostrar *</label>
+                    <input type="text" id="appDisplayName" class="form-control" placeholder="Ej: UTP-A200-Class" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Servicios *</label>
+                    <div class="services-container" id="servicesContainer">
+                        <div class="service-item">
+                            <input type="text" class="form-control service-input" placeholder="Ej: course-batch" required>
+                            <button class="btn btn-remove remove-service"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <button class="btn btn-add" id="addService"><i class="fas fa-plus"></i> Agregar Servicio</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period">Periodo *</label>
+                    <select id="period" class="form-control" required>
+                        <option value="10">10 segundos</option>
+                        <option value="20">20 segundos</option>
+                        <option value="30">30 segundos</option>
+                        <option value="60" selected>1 minuto</option>
+                        <option value="300">5 minutos</option>
+                        <option value="900">15 minutos</option>
+                        <option value="3600">1 hora</option>
+                        <option value="21600">6 horas</option>
+                        <option value="86400">1 día</option>
+                        <option value="604800">7 días</option>
+                        <option value="custom">Personalizado...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="statistic">Estadística *</label>
+                    <select id="statistic" class="form-control" required>
+                        <option value="Average" selected>Average</option>
+                        <option value="Sum">Sum</option>
+                        <option value="SampleCount">SampleCount</option>
+                        <option value="Minimum">Minimum</option>
+                        <option value="Maximum">Maximum</option>
+                        <option value="pNN.NN">Percentil (pNN.NN)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="unit">Unidad *</label>
+                    <select id="unit" class="form-control" required>
+                        <option value="Percent" selected>Percent</option>
+                        <option value="Seconds">Seconds</option>
+                        <option value="Microseconds">Microseconds</option>
+                        <option value="Milliseconds">Milliseconds</option>
+                        <option value="Bytes">Bytes</option>
+                        <option value="Kilobytes">Kilobytes</option>
+                        <option value="Megabytes">Megabytes</option>
+                        <option value="Gigabytes">Gigabytes</option>
+                        <option value="Terabytes">Terabytes</option>
+                        <option value="Bits">Bits</option>
+                        <option value="Kilobits">Kilobits</option>
+                        <option value="Megabits">Megabits</option>
+                        <option value="Gigabits">Gigabits</option>
+                        <option value="Terabits">Terabits</option>
+                        <option value="Count">Count</option>
+                        <option value="None">None</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="threshold">Límite (Threshold) *</label>
+                    <input type="number" id="threshold" class="form-control" value="50" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Acciones de Alarma (Opcional)</label>
+                    <div class="actions-container" id="actionsContainer">
+                        <!-- Las acciones se agregarán aquí -->
+                    </div>
+                    <button class="btn btn-add" id="addAction"><i class="fas fa-plus"></i> Agregar Acción</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Etiquetas (Tags) (Opcional)</label>
+                    <div class="tags-container" id="tagsContainer">
+                        <!-- Los tags se agregarán aquí -->
+                    </div>
+                    <button class="btn btn-add" id="addTag"><i class="fas fa-plus"></i> Agregar Etiqueta</button>
+                </div>
+                
+                <div class="form-group">
+                    <button class="btn" id="generateCommand" style="width: 100%; padding: 12px;"><i class="fas fa-terminal"></i> Generar Comando</button>
+                    <button class="btn" id="resetForm" style="width: 100%; margin-top: 10px; background-color: #f39c12;"><i class="fas fa-redo"></i> Limpiar Formulario</button>
+                </div>
+                
+                <div class="command-output" id="commandOutput">
+                    <code id="generatedCommand"></code>
+                    <div class="output-actions">
+                        <button class="btn" id="copyCommand"><i class="fas fa-copy"></i> Copiar Comando</button>
+                        <button class="btn" id="downloadCommand" style="background-color: var(--success-color);"><i class="fas fa-download"></i> Descargar Script</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal para periodo personalizado -->
+    <div class="modal" id="customPeriodModal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Periodo Personalizado</h3>
+            <div class="form-group">
+                <label for="customPeriodValue">Segundos (múltiplos de 10, máximo 60)</label>
+                <input type="number" id="customPeriodValue" class="form-control" min="10" max="60" step="10" value="60">
+            </div>
+            <button class="btn" id="saveCustomPeriod">Guardar</button>
+        </div>
+    </div>
+    
+    <!-- Modal para agregar acciones -->
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Agregar Acción</h3>
+            <div class="form-group">
+                <label for="actionType">Tipo de Recurso</label>
+                <select id="actionType" class="form-control">
+                    <option value="sns">SNS Topic</option>
+                    <option value="lambda">Lambda Function</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="regionGroup">
+                <label for="actionRegion">Región AWS</label>
+                <select id="actionRegion" class="form-control">
+                    <option value="us-east-1" selected>US East (N. Virginia)</option>
+                    <option value="us-east-2">US East (Ohio)</option>
+                    <option value="us-west-1">US West (N. California)</option>
+                    <option value="us-west-2">US West (Oregon)</option>
+                    <!-- Más regiones pueden ser añadidas -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="accountId">Account ID *</label>
+                <input type="text" id="accountId" class="form-control" placeholder="503134114226" required>
+            </div>
+            
+            <div class="form-group" id="resourceNameGroup">
+                <label for="resourceName">Nombre del Recurso *</label>
+                <input type="text" id="resourceName" class="form-control" placeholder="Nombre del topic o función" required>
+            </div>
+            
+            <button class="btn" id="saveAction">Agregar Acción</button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <i class="fas fa-toolbox"></i>
+                    <span>DevTools Hub</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Categorías</h4>
+                        <a href="../index.html#security">Seguridad</a>
+                        <a href="../index.html#cloud">Cloud</a>
+                        <a href="../index.html#code">Desarrollo</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <a href="#">Documentación</a>
+                        <a href="#">API</a>
+                        <a href="#">Contribuir</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Términos</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+                <p class="copyright">© 2023 DevTools Hub. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="/js/main.js"></script>
+    <script src="/js/aws-ecs-alarm.js"></script>
+</body>
+</html>
