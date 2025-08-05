@@ -3,439 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de CSP</title>
-    <style>
-        :root {
-            --primary-color: #2196F3;
-            --secondary-color: #4CAF50;
-            --danger-color: #f44336;
-            --warning-color: #ff9800;
-            --light-gray: #f5f5f5;
-            --medium-gray: #ddd;
-            --dark-gray: #333;
-            --white: #fff;
-        }
-        
-        * {
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 15px;
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: var(--white);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: var(--dark-gray);
-            text-align: center;
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            margin-top: 0;
-        }
-        
-        .directive-block {
-            margin-bottom: 15px;
-            padding: 15px;
-            border: 1px solid var(--medium-gray);
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        
-        .directive-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            gap: 10px;
-        }
-        
-        .directive-name {
-            font-weight: bold;
-            font-size: 1.1em;
-            word-break: break-word;
-        }
-        
-        .remove-btn {
-            background-color: var(--danger-color);
-            color: var(--white);
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        
-        .remove-btn:hover {
-            opacity: 0.9;
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 60px;
-            padding: 10px;
-            border: 1px solid var(--medium-gray);
-            border-radius: 4px;
-            resize: vertical;
-            font-family: monospace;
-            font-size: 14px;
-        }
-        
-        .buttons {
-            margin: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        #addDirective {
-            background-color: var(--secondary-color);
-            color: var(--white);
-        }
-        
-        #generateCSP {
-            background-color: var(--primary-color);
-            color: var(--white);
-        }
-        
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #e9f7fe;
-            border: 1px solid #b3e0ff;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        #resultText {
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: var(--white);
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-        
-        .copy-btn {
-            background-color: var(--warning-color);
-            color: var(--white);
-            margin-top: 10px;
-        }
-        
-        .directive-selector {
-            margin-bottom: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        select {
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 1px solid var(--medium-gray);
-            font-size: 16px;
-            flex-grow: 1;
-            min-width: 200px;
-        }
-        
-        #initialCSP {
-            width: 100%;
-            min-height: 120px;
-            margin-bottom: 15px;
-            font-family: monospace;
-        }
-        
-        .initial-controls {
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .initial-controls button {
-            flex: 1 1 200px;
-        }
-        
-        .section-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-        
-        #clearAll {
-            background-color: var(--danger-color);
-            color: var(--white);
-        }
-        
-        #parseCSP {
-            background-color: var(--primary-color);
-            color: var(--white);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .directive-selector {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .directive-selector select, 
-            .directive-selector button {
-                width: 100%;
-            }
-            
-            button {
-                padding: 12px 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 12px;
-            }
-            
-            .directive-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .remove-btn {
-                align-self: flex-end;
-            }
-        }
-    </style>
+    <title>Herramientas de Seguridad Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Generador de Política de Seguridad de Contenido (CSP)</h1>
-        
-        <div class="initial-controls">
-            <div style="width: 100%;">
-                <div class="section-title">Paso 1: Ingresa tu CSP actual</div>
-                <textarea id="initialCSP" placeholder="Pega aquí tu política CSP actual para editarla..."></textarea>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>WebSec Tools</span>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="#tools"><i class="fas fa-tools"></i> Herramientas</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Documentación</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Contacto</a></li>
+                    </ul>
+                </nav>
             </div>
-            <button id="parseCSP">Cargar CSP</button>
-            <button id="clearAll">Limpiar Todo</button>
         </div>
-        
-        <div class="section-title">Paso 2: Edita tus directivas</div>
-        <div id="directivesContainer">
-            <!-- Las directivas CSP se agregarán aquí -->
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Herramientas de Seguridad Web para Desarrolladores</h1>
+            <p>Mejora la seguridad de tus aplicaciones web con nuestras herramientas gratuitas y fáciles de usar. Genera políticas de seguridad, prueba configuraciones y protege tus sitios.</p>
+            <a href="#tools" class="btn btn-secondary">Explorar Herramientas</a>
         </div>
-        
-        <div class="directive-selector">
-            <select id="directiveType">
-                <option value="default-src">default-src</option>
-                <option value="script-src">script-src</option>
-                <option value="connect-src">connect-src</option>
-                <option value="img-src">img-src</option>
-                <option value="style-src">style-src</option>
-                <option value="base-uri">base-uri</option>
-                <option value="form-action">form-action</option>
-                <option value="font-src">font-src</option>
-                <option value="frame-src">frame-src</option>
-                <option value="frame-ancestors">frame-ancestors</option>
-                <option value="media-src">media-src</option>
-                <option value="object-src">object-src</option>
-                <option value="worker-src">worker-src</option>
-                <option value="child-src">child-src</option>
-                <option value="manifest-src">manifest-src</option>
-            </select>
-            <button id="addDirective">Agregar Directiva</button>
-        </div>
-        
-        <div class="buttons">
-            <button id="generateCSP">Generar CSP</button>
-        </div>
-        
-        <div id="result">
-            <h3>Tu política CSP generada:</h3>
-            <div id="resultText"></div>
-            <button id="copyCSP" class="copy-btn">Copiar CSP</button>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Manejar clic en "Cargar CSP"
-            document.getElementById('parseCSP').addEventListener('click', function() {
-                parseInitialCSP();
-            });
-
-            // Manejar clic en "Limpiar Todo"
-            document.getElementById('clearAll').addEventListener('click', function() {
-                if(confirm('¿Estás seguro de que quieres limpiar todo? Perderás todos los cambios.')) {
-                    clearAllDirectives();
-                }
-            });
-
-            // Manejar clic en "Agregar Directiva"
-            document.getElementById('addDirective').addEventListener('click', function() {
-                const directiveType = document.getElementById('directiveType').value;
-                addDirective(directiveType, '');
-            });
-
-            // Manejar clic en "Generar CSP"
-            document.getElementById('generateCSP').addEventListener('click', function() {
-                generateCSP();
-            });
-
-            // Manejar clic en "Copiar CSP"
-            document.getElementById('copyCSP').addEventListener('click', function() {
-                copyToClipboard(document.getElementById('resultText').textContent);
-                alert('CSP copiado al portapapeles!');
-            });
-
-            // Función para parsear el CSP inicial
-            function parseInitialCSP() {
-                const initialCSP = document.getElementById('initialCSP').value.trim();
-                if (!initialCSP) {
-                    alert('Por favor ingresa un CSP para analizar');
-                    return;
-                }
-
-                // Limpiar directivas existentes
-                clearAllDirectives();
-
-                // Dividir el CSP en directivas individuales
-                const directives = initialCSP.split(';').map(d => d.trim()).filter(d => d);
-
-                // Procesar cada directiva
-                directives.forEach(directive => {
-                    const spaceIndex = directive.indexOf(' ');
-                    if (spaceIndex === -1) return;
-
-                    const name = directive.substring(0, spaceIndex).trim();
-                    const value = directive.substring(spaceIndex + 1).trim();
-
-                    addDirective(name, value);
-                });
-            }
-
-            // Función para limpiar todas las directivas
-            function clearAllDirectives() {
-                document.getElementById('directivesContainer').innerHTML = '';
-                document.getElementById('initialCSP').value = '';
-                document.getElementById('result').style.display = 'none';
-            }
-
-            // Función para agregar una nueva directiva
-            function addDirective(name, value) {
-                // Verificar si la directiva ya existe
-                const existingDirectives = document.querySelectorAll('.directive-name');
-                for (let i = 0; i < existingDirectives.length; i++) {
-                    if (existingDirectives[i].textContent === name) {
-                        // Actualizar el valor existente
-                        const directiveId = existingDirectives[i].closest('.directive-block').id;
-                        document.getElementById(`${directiveId}-value`).value = value;
-                        return;
-                    }
-                }
-
-                // Si no existe, crear nueva directiva
-                const container = document.getElementById('directivesContainer');
-                const directiveId = 'directive-' + Date.now();
-
-                const directiveBlock = document.createElement('div');
-                directiveBlock.className = 'directive-block';
-                directiveBlock.id = directiveId;
-
-                directiveBlock.innerHTML = `
-                    <div class="directive-header">
-                        <span class="directive-name">${name}</span>
-                        <button class="remove-btn" data-directive="${directiveId}">Eliminar</button>
+    </section>
+    
+    <section class="features" id="tools">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestras Herramientas</h2>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-file-contract"></i>
                     </div>
-                    <textarea id="${directiveId}-value" placeholder="Ingresa los valores para ${name} (separados por espacios)">${value}</textarea>
-                `;
-
-                container.appendChild(directiveBlock);
-
-                // Agregar evento al botón de eliminar
-                directiveBlock.querySelector('.remove-btn').addEventListener('click', function() {
-                    if(confirm('¿Eliminar esta directiva?')) {
-                        document.getElementById(directiveId).remove();
-                    }
-                });
-            }
-
-            // Función para generar el CSP
-            function generateCSP() {
-                const directiveBlocks = document.querySelectorAll('.directive-block');
-                let cspParts = [];
-
-                directiveBlocks.forEach(block => {
-                    const name = block.querySelector('.directive-name').textContent;
-                    const value = block.querySelector('textarea').value.trim();
-                    
-                    if (value) {
-                        cspParts.push(`${name} ${value}`);
-                    }
-                });
-
-                if(cspParts.length === 0) {
-                    alert('No hay directivas para generar. Agrega al menos una directiva.');
-                    return;
-                }
-
-                const cspString = cspParts.join('; ');
-                document.getElementById('resultText').textContent = cspString + (cspParts.length > 0 ? ';' : '');
-                document.getElementById('result').style.display = 'block';
+                    <div class="tool-content">
+                        <h3>Generador CSP</h3>
+                        <p>Crea y personaliza políticas de seguridad de contenido (CSP) para proteger tu sitio contra ataques XSS, inyección de datos y otros vectores de ataque.</p>
+                        <a href="csp-generator.html" class="btn">Usar Herramienta</a>
+                    </div>
+                </div>
                 
-                // Hacer scroll al resultado
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            // Función para copiar al portapapeles
-            function copyToClipboard(text) {
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-            }
-        });
-    </script>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Analizador de Cabeceras</h3>
+                        <p>Próximamente: Analiza las cabeceras de seguridad HTTP de tu sitio web y recibe recomendaciones para mejorarlas.</p>
+                        <button class="btn" disabled>Próximamente</button>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Escáner de Vulnerabilidades</h3>
+                        <p>Próximamente: Escanea tu sitio web en busca de vulnerabilidades comunes y recibe un reporte detallado.</p>
+                        <button class="btn" disabled>Próximamente</button>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Generador de Tokens</h3>
+                        <p>Próximamente: Genera tokens CSRF, JWT y otros tipos de tokens de seguridad para tus aplicaciones.</p>
+                        <button class="btn" disabled>Próximamente</button>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Validador de HTML</h3>
+                        <p>Próximamente: Valida tu código HTML para detectar posibles problemas de seguridad y compatibilidad.</p>
+                        <button class="btn" disabled>Próximamente</button>
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <div class="tool-content">
+                        <h3>Pruebas de Seguridad</h3>
+                        <p>Próximamente: Realiza pruebas básicas de seguridad contra tu sitio web para identificar vulnerabilidades comunes.</p>
+                        <button class="btn" disabled>Próximamente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>WebSec Tools</span>
+                </div>
+                <p>Herramientas gratuitas para desarrolladores preocupados por la seguridad web.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <p class="copyright">© 2023 WebSec Tools. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="js/main.js"></script>
 </body>
 </html>
-
